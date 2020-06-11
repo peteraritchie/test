@@ -1,10 +1,182 @@
 {
-  "openapi" : "3.0.1",
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Health-check API",
+    "description" : "Health-check API\n\nSee: [https://tools.ietf.org/html/draft-inadarei-api-health-check-04#section-3.8]()\n",
+    "contact" : {
+      "email" : "you@your-company.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version" : "1.0.0"
+  },
   "servers" : [ {
-    "url" : "/"
+    "url" : "https://virtserver.swaggerhub.com/peteraritchie/health-check/1.0.0",
+    "description" : "SwaggerHub API Auto Mocking"
   } ],
-  "paths" : { },
+  "paths" : {
+    "/api" : {
+      "get" : {
+        "tags" : [ "health check" ],
+        "summary" : "gets the health attributes of the api",
+        "description" : "get health information of the api\n",
+        "operationId" : "getHealth",
+        "responses" : {
+          "200" : {
+            "description" : "'pass' scenario",
+            "content" : {
+              "application/health+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/healthCheck"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "components" : {
-    "schemas" : { }
+    "schemas" : {
+      "healthCheck" : {
+        "required" : [ "serviceId", "status" ],
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "$ref" : "#/components/schemas/status"
+          },
+          "serviceId" : {
+            "type" : "string",
+            "description" : "(optional) is a unique identifier of the service, in the\napplication scope.\n",
+            "example" : "209123"
+          },
+          "version" : {
+            "pattern" : "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$",
+            "type" : "string",
+            "description" : "(optional) is a human-friendly description of the\nservice.\n",
+            "example" : "1.0.0"
+          },
+          "releaseId" : {
+            "type" : "string",
+            "description" : "(optional) in well-designed APIs, backwards-compatible\nchanges in the service should not update a version number.\n\nAPIs usually change their version number as infrequently as \npossible, to preserve stable interface.  However, implementation of\nan API may change much more frequently, which leads to the\nimportance of having separate \"release number\" or \"releaseId\"\nthat is different from the public version of the API.\n",
+            "example" : "1.0.0"
+          },
+          "notes" : {
+            "type" : "array",
+            "description" : "(optional) array of notes relevant to current state of health\n",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "output" : {
+            "type" : "string",
+            "description" : "output: (optional) raw error output, in case of \"fail\" or \"warn\"\nstates.  This field SHOULD be omitted for \"pass\" state.\n",
+            "example" : "Error Wil Robinson!"
+          },
+          "checks" : {
+            "$ref" : "#/components/schemas/checks"
+          },
+          "links" : {
+            "$ref" : "#/components/schemas/links"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "(optional) is a human-friendly description of the service.\n",
+            "example" : "An application program interface (API) is a set of routines,\nprotocols, and tools for building software applications.\n"
+          }
+        },
+        "example" : "{\n \"status\": \"pass\",\n \"version\": \"1\",\n \"releaseId\": \"1.2.2\",\n \"notes\": [\"\"],\n \"output\": \"\",\n \"serviceId\": \"f03e522f-1f44-4062-9b55-9587f91c9c41\",\n \"description\": \"health of authz service\",\n \"checks\": {\n   \"cassandra:responseTime\": [\n     {\n       \"componentId\": \"dfd6cf2b-1b6e-4412-a0b8-f6f7797a60d2\",\n       \"componentType\": \"datastore\",\n       \"observedValue\": 250,\n       \"observedUnit\": \"ms\",\n       \"status\": \"pass\",\n       \"affectedEndpoints\" : [\n         \"/users/{userId}\",\n         \"/customers/{customerId}/status\",\n         \"/shopping/{anything}\"\n       ],\n       \"time\": \"2018-01-17T03:36:48Z\",\n       \"output\": \"\"\n     }\n   ],\n   \"cassandra:connections\": [\n     {\n       \"componentId\": \"dfd6cf2b-1b6e-4412-a0b8-f6f7797a60d2\",\n       \"componentType\": \"datastore\",\n       \"observedValue\": 75,\n       \"status\": \"warn\",\n       \"time\": \"2018-01-17T03:36:48Z\",\n       \"output\": \"\",\n       \"links\": {\n         \"self\": \"http://api.example.com/dbnode/dfd6cf2b/health\"\n       }\n     }\n   ],\n   \"uptime\": [\n     {\n       \"componentType\": \"system\",\n       \"observedValue\": 1209600.245,\n       \"observedUnit\": \"s\",\n       \"status\": \"pass\",\n       \"time\": \"2018-01-17T03:36:48Z\"\n     }\n   ],\n   \"cpu:utilization\": [\n     {\n       \"componentId\": \"6fd416e0-8920-410f-9c7b-c479000f7227\",\n       \"node\": 1,\n       \"componentType\": \"system\",\n       \"observedValue\": 85,\n       \"observedUnit\": \"percent\",\n       \"status\": \"warn\",\n       \"time\": \"2018-01-17T03:36:48Z\",\n       \"output\": \"\"\n     },\n     {\n       \"componentId\": \"6fd416e0-8920-410f-9c7b-c479000f7227\",\n       \"node\": 2,\n       \"componentType\": \"system\",\n       \"observedValue\": 85,\n       \"observedUnit\": \"percent\",\n       \"status\": \"warn\",\n       \"time\": \"2018-01-17T03:36:48Z\",\n       \"output\": \"\"\n     }\n   ],\n   \"memory:utilization\": [\n     {\n       \"componentId\": \"6fd416e0-8920-410f-9c7b-c479000f7227\",\n       \"node\": 1,\n       \"componentType\": \"system\",\n       \"observedValue\": 8.5,\n       \"observedUnit\": \"GiB\",\n       \"status\": \"warn\",\n       \"time\": \"2018-01-17T03:36:48Z\",\n       \"output\": \"\"\n     },\n     {\n       \"componentId\": \"6fd416e0-8920-410f-9c7b-c479000f7227\",\n       \"node\": 2,\n       \"componentType\": \"system\",\n       \"observedValue\": 5500,\n       \"observedUnit\": \"MiB\",\n       \"status\": \"pass\",\n       \"time\": \"2018-01-17T03:36:48Z\",\n       \"output\": \"\"\n     }\n   ]\n },\n \"links\": {\n   \"about\": \"http://api.example.com/about/authz\",\n   \"http://api.x.io/rel/thresholds\":\n     \"http://api.x.io/about/authz/thresholds\"\n }\n}\n"
+      },
+      "checks" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "$ref" : "#/components/schemas/component-details"
+        },
+        "description" : "Checks object may have a number of unique keys, one for each\nlogical downstream dependency or sub-component.\n",
+        "example" : "{'body':'tbd'}"
+      },
+      "component-details" : {
+        "properties" : {
+          "componentId" : {
+            "type" : "string",
+            "description" : "(optional) is a unique identifier of an instance of a\nspecific sub-component/dependency of a service.\n",
+            "example" : "dfd6cf2b-1b6e-4412-a0b8-f6f7797a60d2"
+          },
+          "componentType" : {
+            "type" : "string",
+            "description" : "(optional) SHOULD be present if componentName is present.\nIt's a type of the component and could be one of:\n\n  o  Pre-defined value from this spec.  Pre-defined values include:\n\n     *  component\n\n     *  datastore\n\n     *  system\n\n  o  A common and standard term from a well-known source such as\n     schema.org, IANA or microformats.\n\n  o  A URI that indicates extra semantics and processing rules that MAY\n     be provided by a resource at the other end of the URI.  URIs do\n     not have to be dereferenceable, however.  They are just a\n     namespace, and the meaning of a namespace CAN be provided by any\n     convenient means (e.g. publishing an RFC, Swagger document or a\n     nicely printed book).\n",
+            "format" : "url",
+            "example" : "https://www.acme-corp.com"
+          },
+          "observedValue" : {
+            "type" : "string",
+            "description" : "(optional) could be any valid JSON value, such as:\nstring, number, object, array or literal.\n",
+            "example" : "408-867-5309"
+          },
+          "observedUnit" : {
+            "description" : "(optional) SHOULD be present if observedValue is\npresent.  Clarifies the unit of measurement in which observedUnit is\nreported, e.g. for a time-based value it is important to know whether\nthe time is reported in seconds, minutes, hours or something else.\nTo make sure unit is denoted by a well-understood name or an\nabbreviation, it SHOULD be one of:\n\no  A common and standard term from a well-known source such as\n   schema.org, IANA, microformats, or a standards document such as\n   [RFC3339].\n\no  A URI that indicates extra semantics and processing rules that MAY\n   be provided by a resource at the other end of the URI.  URIs do\n   not have to be dereferenceable, however.  They are just a\n   namespace, and the meaning of a namespace CAN be provided by any\n   convenient means (e.g. publishing an RFC, Swagger document or a\n   nicely printed book).\n",
+            "example" : "TBD",
+            "oneOf" : [ {
+              "type" : "string",
+              "format" : "uri"
+            }, {
+              "type" : "string",
+              "format" : "date-time"
+            }, {
+              "type" : "string",
+              "format" : "time"
+            }, {
+              "type" : "string",
+              "format" : "uuid"
+            }, {
+              "type" : "number"
+            } ]
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/status"
+          },
+          "affectedEndpoints" : {
+            "type" : "array",
+            "description" : "(optional) is a JSON array containing URI Templates\nas defined by [RFC6570].  This field SHOULD be omitted if the\n\"status\" field is present and has value equal to \"pass\".  A typical\nAPI has many URI endpoints.  Most of the time we are interested in\nthe overall health of the API, without diving into details.  That\nsaid, sometimes operational and resilience middleware needs to know\nmore details about the health of the API (which is why \"checks\"\nproperty provides details).  In such cases, we often need to indicate\nwhich particular endpoints are affected by a particular check's\ntroubles vs. other endpoints that may be fine.\n",
+            "example" : [ ],
+            "items" : {
+              "type" : "string",
+              "format" : "uri"
+            }
+          },
+          "time" : {
+            "type" : "string",
+            "description" : "time (optional) is the date-time, in ISO8601 format,\nat which the reading of the observedValue was recorded.\n",
+            "format" : "time",
+            "example" : "2017-07-21T17:32:28Z"
+          },
+          "output" : {
+            "type" : "string",
+            "description" : "output: (optional) raw error output, in case of \"fail\" or \"warn\"\nstates.  This field SHOULD be omitted for \"pass\" state.\n",
+            "example" : "TBD"
+          },
+          "links" : {
+            "$ref" : "#/components/schemas/links"
+          }
+        }
+      },
+      "links" : {
+        "type" : "object",
+        "additionalProperties" : {
+          "type" : "string",
+          "format" : "uri"
+        },
+        "description" : "(optional) is an object containing link relations and URIs\n[RFC3986] for external links that MAY contain more information about\nthe health of the endpoint.  All values of this object SHALL be URIs.\nKeys MAY also be URIs.  Per web-linking standards [RFC8288] a link\nrelationship SHOULD either be a common/registered one or be indicated\nas a URI, to avoid name clashes.  If a \"self\" link is provided, it\nMAY be used by clients to check health via HTTP response code, as\nmentioned above.\n",
+        "example" : "TBD"
+      },
+      "status" : {
+        "type" : "string",
+        "description" : "status (optional) has the exact same meaning as the top-level\n\"output\" element, but for the sub-component/downstream dependency\nrepresented by the details object.\n",
+        "example" : "pass",
+        "enum" : [ "pass", "fail", "warn" ]
+      }
+    }
   }
 }

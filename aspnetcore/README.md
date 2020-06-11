@@ -1,5 +1,6 @@
 # IO.Swagger - ASP.NET Core 2.0 Server
 
+Health-check API  See: [https://tools.ietf.org/html/draft-inadarei-api-health-check-04#section-3.8]() 
 
 ## Run
 
