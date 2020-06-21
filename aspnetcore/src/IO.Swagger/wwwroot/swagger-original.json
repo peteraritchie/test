@@ -66,6 +66,7 @@
           "notes" : {
             "type" : "array",
             "description" : "(optional) array of notes relevant to current state of health\n",
+            "example" : [ "" ],
             "items" : {
               "type" : "string"
             }
@@ -108,7 +109,7 @@
             "type" : "string",
             "description" : "(optional) SHOULD be present if componentName is present.\nIt's a type of the component and could be one of:\n\n  o  Pre-defined value from this spec.  Pre-defined values include:\n\n     *  component\n\n     *  datastore\n\n     *  system\n\n  o  A common and standard term from a well-known source such as\n     schema.org, IANA or microformats.\n\n  o  A URI that indicates extra semantics and processing rules that MAY\n     be provided by a resource at the other end of the URI.  URIs do\n     not have to be dereferenceable, however.  They are just a\n     namespace, and the meaning of a namespace CAN be provided by any\n     convenient means (e.g. publishing an RFC, Swagger document or a\n     nicely printed book).\n",
             "format" : "url",
-            "example" : "https://www.acme-corp.com"
+            "example" : "https://www.example.com/information-storate/dbms"
           },
           "observedValue" : {
             "type" : "string",
@@ -117,7 +118,7 @@
           },
           "observedUnit" : {
             "description" : "(optional) SHOULD be present if observedValue is\npresent.  Clarifies the unit of measurement in which observedUnit is\nreported, e.g. for a time-based value it is important to know whether\nthe time is reported in seconds, minutes, hours or something else.\nTo make sure unit is denoted by a well-understood name or an\nabbreviation, it SHOULD be one of:\n\no  A common and standard term from a well-known source such as\n   schema.org, IANA, microformats, or a standards document such as\n   [RFC3339].\n\no  A URI that indicates extra semantics and processing rules that MAY\n   be provided by a resource at the other end of the URI.  URIs do\n   not have to be dereferenceable, however.  They are just a\n   namespace, and the meaning of a namespace CAN be provided by any\n   convenient means (e.g. publishing an RFC, Swagger document or a\n   nicely printed book).\n",
-            "example" : "TBD",
+            "example" : "https://example.com/interval/time/ns",
             "oneOf" : [ {
               "type" : "string",
               "format" : "uri"
@@ -140,7 +141,7 @@
           "affectedEndpoints" : {
             "type" : "array",
             "description" : "(optional) is a JSON array containing URI Templates\nas defined by [RFC6570].  This field SHOULD be omitted if the\n\"status\" field is present and has value equal to \"pass\".  A typical\nAPI has many URI endpoints.  Most of the time we are interested in\nthe overall health of the API, without diving into details.  That\nsaid, sometimes operational and resilience middleware needs to know\nmore details about the health of the API (which is why \"checks\"\nproperty provides details).  In such cases, we often need to indicate\nwhich particular endpoints are affected by a particular check's\ntroubles vs. other endpoints that may be fine.\n",
-            "example" : [ ],
+            "example" : [ "https://example.com/dependent-service" ],
             "items" : {
               "type" : "string",
               "format" : "uri"
@@ -155,7 +156,7 @@
           "output" : {
             "type" : "string",
             "description" : "output: (optional) raw error output, in case of \"fail\" or \"warn\"\nstates.  This field SHOULD be omitted for \"pass\" state.\n",
-            "example" : "TBD"
+            "example" : "System.NullReferenceException: Object reference not set to an instance of an object."
           },
           "links" : {
             "$ref" : "#/components/schemas/links"
@@ -169,7 +170,7 @@
           "format" : "uri"
         },
         "description" : "(optional) is an object containing link relations and URIs\n[RFC3986] for external links that MAY contain more information about\nthe health of the endpoint.  All values of this object SHALL be URIs.\nKeys MAY also be URIs.  Per web-linking standards [RFC8288] a link\nrelationship SHOULD either be a common/registered one or be indicated\nas a URI, to avoid name clashes.  If a \"self\" link is provided, it\nMAY be used by clients to check health via HTTP response code, as\nmentioned above.\n",
-        "example" : "TBD"
+        "example" : "{\n  \"self\": \"http://api.example.com/dbnode/dfd6cf2b/health\"\n}\n"
       },
       "status" : {
         "type" : "string",
